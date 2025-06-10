@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnergyScript : MonoBehaviour
 {
     //エネルギー量
-    int energyAmount = 0;
+    float energyAmount = 0;
 
     void Start()
     {
@@ -27,8 +27,17 @@ public class EnergyScript : MonoBehaviour
     }
 
     //エネルギー消費関数
-    public void UseEnergy(int useAmount)//関数を呼ぶ側で消費量を指定
+    public bool UseEnergy(float useAmount)//関数を呼ぶ側で消費量を指定
     {
-        energyAmount -= useAmount;
+        if (energyAmount - useAmount >= 0)//必要エネルギーがあるとき
+        {
+            energyAmount -= useAmount;
+
+            return true;
+        }
+        else //ないとき
+        {
+            return false;
+        }
     }
 }
