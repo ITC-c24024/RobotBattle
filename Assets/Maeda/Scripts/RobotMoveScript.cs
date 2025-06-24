@@ -52,7 +52,7 @@ public class RobotMoveScript : MonoBehaviour
 
     public void MoveUp()//ジャンプ
     {
-        if (energyScript.UseEnergy(1.0f))
+        if (energyScript.UseEnergy(10.0f))
         {
             robotRB.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
@@ -93,7 +93,7 @@ public class RobotMoveScript : MonoBehaviour
     //移動速度の調整
     void CheckVelocity()
     {
-        //ロボットのxy平面の速度を計算
+        //ロボットのxz平面の速度を計算
         float speed = Mathf.Sqrt(Mathf.Pow(robotRB.velocity.x, 2) + Mathf.Pow(robotRB.velocity.z, 2));
         
         //移動速度上限チェック
@@ -121,7 +121,7 @@ public class RobotMoveScript : MonoBehaviour
                 //角度が小さい方に回転
                 robotRB.AddTorque(direction * -Mathf.Sign(angle) * rotateForce, ForceMode.Force);
             }
-
+            
             yield return null;
         }
 
