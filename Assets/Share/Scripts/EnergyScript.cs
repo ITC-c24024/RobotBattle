@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnergyScript : MonoBehaviour
 {
     [SerializeField, Header("毎秒の増加量")]
-    float incAmount = 1.0f;
+    float incAmount = 10.0f;
     [SerializeField, Header("エネルギーの最大容量")]
     float maxAmount = 1000f;
     //現在のエネルギー量
