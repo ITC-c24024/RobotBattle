@@ -23,14 +23,14 @@ public class RobotMoveScript : MonoBehaviour
     float rotateForce = 1.0f;
     [SerializeField, Header("最高速度")]
     float maxSpeed = 1.0f;
-
+    
     //回転制御bool
     bool isRotate = false;
 
     void Start()
     {
         robotRB = GetComponent<Rigidbody>();
-
+        
         SetMass();
 
         //テスト用
@@ -43,8 +43,8 @@ public class RobotMoveScript : MonoBehaviour
         if (Input.GetKey(KeyCode.Space)) MoveUp();
     }
 
-    //機体の質量を設定
-    void SetMass()
+    //機体の質量を設定(機体の重量が変わるたびにCoreScriptから呼ぶ)
+    public void SetMass()
     {
         //CoreScriptの重量変数をロボットの質量とする
         robotRB.mass = coreScript.weight;
@@ -76,7 +76,7 @@ public class RobotMoveScript : MonoBehaviour
             Vector3 direction = targetOBJ.transform.position - transform.position;
             direction.y = 0;//xz平面で移動する
 
-            //ターゲットに近づsいたら終了(仮条件)
+            //ターゲットに近づいたら終了(仮条件)
             if (Mathf.Abs(direction.x) < (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
              && Mathf.Abs(direction.z) < (transform.localScale.z + targetOBJ.transform.localScale.z) / 2)
                 break;
