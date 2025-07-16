@@ -52,19 +52,17 @@ public class RobotMoveScript : MonoBehaviour
 
     public void MoveUp()//ジャンプ
     {
-        if (energyScript.UseEnergy(0.1f))
-        {
-            robotRB.AddForce(transform.up * jumpForce, ForceMode.Force);
+        robotRB.AddForce(transform.up * jumpForce, ForceMode.Force);
 
-            if (robotRB.velocity.y > maxSpeed)
-            {
-                robotRB.velocity = new Vector3(
-                    robotRB.velocity.x,
-                    maxSpeed,
-                    robotRB.velocity.z
-                    );
-            }
+        if (robotRB.velocity.y > maxSpeed)
+        {
+            robotRB.velocity = new Vector3(
+                robotRB.velocity.x,
+                maxSpeed,
+                robotRB.velocity.z
+                );
         }
+
     }
 
     //ターゲットへの移動
@@ -73,15 +71,26 @@ public class RobotMoveScript : MonoBehaviour
         //条件は後々変更
         while (true)
         {
+            if (transform.position.y < targetOBJ.transform.position.y
+                && energyScript.UseEnergy(0.1f))
+            {
+                MoveUp();
+            }
+
             Vector3 direction = targetOBJ.transform.position - transform.position;
-            direction.y = 0;//xz平面で移動する
 
             //ターゲットに近づいたら終了(仮条件)
             if (Mathf.Abs(direction.x) < (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
-             && Mathf.Abs(direction.z) < (transform.localScale.z + targetOBJ.transform.localScale.z) / 2)
+                && Mathf.Abs(direction.y) < (transform.localScale.y + targetOBJ.transform.localScale.y) / 2
+                && Mathf.Abs(direction.z) < (transform.localScale.z + targetOBJ.transform.localScale.z) / 2
+             )
                 break;
 
-            if (energyScript.UseEnergy(0.01f))
+            direction.y = 0;//xz平面で移動する
+
+            if (Mathf.Abs(direction.x) > (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
+                || Mathf.Abs(direction.z) > (transform.localScale.z + targetOBJ.transform.localScale.z) / 2
+                && energyScript.UseEnergy(0.01f))
             {
                 //自分から相手の方向にAddForce
                 robotRB.AddForce(direction.normalized * moveForce, ForceMode.Force);
@@ -96,6 +105,10 @@ public class RobotMoveScript : MonoBehaviour
 
                     StartCoroutine(RotateRobot(targetOBJ));
                 }
+            }
+            else
+            {
+                robotRB.velocity = Vector3.zero;
             }
 
             yield return null;
@@ -127,6 +140,9 @@ public class RobotMoveScript : MonoBehaviour
         while (true) 
         {
             Vector3 direction = targetOBJ.transform.position - transform.position;
+
+            //if (Mathf.Abs(direction.y) < (transform.localScale.y + targetOBJ.transform.localScale.y) / 2) break;
+
             direction.y = 0;//xz平面で回転
 
             if (energyScript.UseEnergy(0.01f))
