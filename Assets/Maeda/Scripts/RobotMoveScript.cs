@@ -71,8 +71,8 @@ public class RobotMoveScript : MonoBehaviour
         //条件は後々変更
         while (true)
         {
-            if (transform.position.y < targetOBJ.transform.position.y
-                && energyScript.UseEnergy(0.1f))
+            if (transform.position.y - targetOBJ.transform.position.y <= -1
+                && energyScript.UseEnergy(0.1f)) 
             {
                 MoveUp();
             }
@@ -82,8 +82,7 @@ public class RobotMoveScript : MonoBehaviour
             //ターゲットに近づいたら終了(仮条件)
             if (Mathf.Abs(direction.x) < (transform.localScale.x + targetOBJ.transform.localScale.x) / 2
                 && Mathf.Abs(direction.y) < (transform.localScale.y + targetOBJ.transform.localScale.y) / 2
-                && Mathf.Abs(direction.z) < (transform.localScale.z + targetOBJ.transform.localScale.z) / 2
-             )
+                && Mathf.Abs(direction.z) < (transform.localScale.z + targetOBJ.transform.localScale.z) / 2)
                 break;
 
             direction.y = 0;//xz平面で移動する
@@ -108,7 +107,7 @@ public class RobotMoveScript : MonoBehaviour
             }
             else
             {
-                robotRB.velocity = Vector3.zero;
+                robotRB.velocity = new Vector3(0, robotRB.velocity.y, 0);
             }
 
             yield return null;
@@ -140,8 +139,6 @@ public class RobotMoveScript : MonoBehaviour
         while (true) 
         {
             Vector3 direction = targetOBJ.transform.position - transform.position;
-
-            //if (Mathf.Abs(direction.y) < (transform.localScale.y + targetOBJ.transform.localScale.y) / 2) break;
 
             direction.y = 0;//xz平面で回転
 
